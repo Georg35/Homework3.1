@@ -2,7 +2,9 @@ package pro.sky.homework31.service;
 
 import org.springframework.stereotype.Service;
 import pro.sky.homework31.model.Faculty;
+import pro.sky.homework31.repository.FacultyRepository;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,46 +13,33 @@ import java.util.stream.Collectors;
 @Service
 public class FacultyService {
 
-    private final Map<Long, Faculty> facultyMap = new HashMap<>();
+    private FacultyRepository facultyRepository;
 
-    private static Long countf = 0L;
-
-    public FacultyService() {
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
     }
 
-    public Faculty add(Faculty faculty) {
-        faculty.setId(++countf);
-        facultyMap.put(faculty.getId(),faculty);
-        return faculty;
-
+    public Faculty createFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty remove(Long id) {
-        facultyMap.remove(id);
-        return facultyMap.get(id);
+    public Faculty findFaculty(Long id) {
+        return facultyRepository.getById(id);
     }
 
-    public Faculty find(Long id)  {
-
-
-        return facultyMap.get(id);
-
+    public Faculty editFaculty(Faculty faculty) {
+        return facultyRepository.save(faculty);
     }
 
-    public Faculty change(Long id,Faculty faculty) {
-        facultyMap.put(id, faculty);
-        faculty.setId(id);
-        return faculty;
-
+    public void deleteFaculty(Long id) {
+        facultyRepository.deleteById(id);
     }
-    public List<Faculty> find(String color) {
 
+    public Collection<Faculty> getAllFaculties() {
+        return facultyRepository.findAll();
+    }
 
-        final List<Faculty> colorFaculty =
-                facultyMap.values().stream()
-                        .filter(e -> e.getColor().equals(color))
-                        .collect(Collectors.toList());
-
-        return colorFaculty;
+    public List<Faculty> getFacultyAccordingColor(String color) {
+        return facultyRepository.findByColor(color);
     }
 }

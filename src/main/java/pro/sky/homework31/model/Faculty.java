@@ -1,11 +1,21 @@
 package pro.sky.homework31.model;
 
-import java.util.Objects;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
+import java.util.Objects;
+@Entity
 public class Faculty {
-    private Long id=0l;
+    @GeneratedValue
+    @Id
+    private Long id;
     private String name;
     private String color;
+
+    public Faculty() {
+    }
+
 
     public Faculty(String name, String color) {
         this.name = name;

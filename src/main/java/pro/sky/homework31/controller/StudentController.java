@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import pro.sky.homework31.model.Student;
 import pro.sky.homework31.service.StudentService;
 
+import java.util.Collection;
 import java.util.List;
 
 @RequestMapping("/student")
@@ -17,48 +18,37 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/{studentId}")
-    public ResponseEntity<Student> getStudent(@PathVariable Long studentId) {
-        Student student = studentService.find(studentId);
-        if (student == null) {
+    @PostMapping //CREATE  http://localhost:8080/student
+    public Student createStudent(@RequestBody Student student){
+        return studentService.createStudent(student);
+    }
+    @GetMapping("{id}") //READ  http://localhost:8080/student/1
+    public ResponseEntity<Student> findStudent(@RequestBody @PathVariable Long id){
+        Student student = studentService.findStudent(id);
+        if(student == null){
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(student);
-
     }
-    @GetMapping("/age/{studentAge}")
-    public ResponseEntity<List<Student>> getStudent(@PathVariable int studentAge) {
-        // List<Student> students = (java.util.List<Student>) studentService.find(studentAge);
-        if (studentService.find(studentAge).isEmpty()) {
-            return ResponseEntity.notFound().build();
+    @PutMapping("{id}") //UPDATE  http://localhost:8080/student/1
+    public ResponseEntity<Student> editStudent(@RequestBody Student student){
+        Student edittingStudent = studentService.editStudent(student);
+        if(edittingStudent == null){
+            ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok((java.util.List<Student>) studentService.find(studentAge));
-
+        return ResponseEntity.ok(student);
     }
-
-    @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student createdStudent = studentService.add(student);
-        return ResponseEntity.ok(createdStudent);
+    @DeleteMapping("{id}") //DELETE  http://localhost:8080/student/1
+    public ResponseEntity<Student> deleteStudent(@RequestBody @PathVariable Long id){
+        studentService.deleteStudent(id);
+        return ResponseEntity.ok().build();
     }
-
-    @PutMapping
-    public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
-        Student updateStudent = studentService.change(student.getId(), student);
-        if (updateStudent == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updateStudent);
+    @GetMapping //READ  http://localhost:8080/student
+    public ResponseEntity<Collection<Student>> getAllStudents(){
+        return ResponseEntity.ok(studentService.getAllStudents());
     }
-
-    @DeleteMapping("/{studentId}")
-    public ResponseEntity<Student> deleteStudent(@PathVariable Long studentId) {
-        Student removeStudent = studentService.remove(studentId);
-        if (removeStudent == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(removeStudent);
-
-
+    @GetMapping("/filter_by_age/{age}") //READ  http://localhost:8080/student/filter_by_age/20
+    public List<Student> getStudentsAccordingAge(@PathVariable int age){
+        return studentService.getStudentsAccordingAge(age);
     }
 }

@@ -1,64 +1,45 @@
 package pro.sky.homework31.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.sky.homework31.model.Student;
+import pro.sky.homework31.repository.StudentRepository;
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 @Service
 public class StudentService {
 
-    private Map<Long, Student> studentMap = new HashMap<>();
-    private static Long count = 0L;
+    private StudentRepository studentRepository;
 
-    public StudentService(Map<Long, Student> studentMap) {
-        this.studentMap = studentMap;
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
+
+    public Student createStudent(Student student) {
+        return studentRepository.save(student);
 
     }
 
-    public StudentService() {
+    public Student findStudent(Long id) {
+        return studentRepository.getById(id);
     }
 
-    public Student add(Student student) {
-        student.setId(++count);
-        studentMap.put(student.getId(), student);
-        return student;
-
+    public Student editStudent(Student student) {
+        return studentRepository.save(student);
     }
 
-    public Student remove(Long id) {
-
-        studentMap.remove(id);
-        return studentMap.get(id);
+    public void deleteStudent(Long id) {
+        studentRepository.deleteById(id);
     }
 
-    public Student find(Long id)  {
-
-       /* return studentMap.values().stream()
-                .filter(e -> e.equals(student))
-                .findFirst()
-                .orElseThrow(IllegalArgumentException::new);*/
-        return studentMap.get(id);
-    }
-    public List<Student> find(int age) {
-
-
-        final List<Student> ageStudent =
-                studentMap.values().stream()
-                        .filter(e -> e.getAge() == age)
-                        .collect(Collectors.toList());
-
-        return ageStudent;
+    public Collection<Student> getAllStudents() {
+        return studentRepository.findAll();
     }
 
-
-    public Student change(Long id,Student student) {
-        studentMap.put(id, student);
-        student.setId(id);
-        return student;
-
+    public List<Student> getStudentsAccordingAge(int age) {
+        return studentRepository.findStudentByAge(age);
     }
 }
