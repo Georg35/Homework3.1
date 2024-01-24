@@ -3,13 +3,8 @@ package pro.sky.homework31.service;
 import org.springframework.stereotype.Service;
 import pro.sky.homework31.model.Faculty;
 import pro.sky.homework31.repository.FacultyRepository;
-
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 @Service
 public class FacultyService {
 
@@ -42,4 +37,19 @@ public class FacultyService {
     public List<Faculty> getFacultyAccordingColor(String color) {
         return facultyRepository.findByColor(color);
     }
+
+    public Collection<Faculty> getFacultyByColorOrName(String color, String name) {
+        return facultyRepository.findFacultyByColorOrNameContainsIgnoreCase(color, name);
+    }
+
+    public Collection<Faculty> findFacultyByName(String name) {
+        return facultyRepository.findFacultyByNameIgnoreCase(name);
+
+    }
+
+    public Collection<Faculty> findAllFaculties() {
+        return facultyRepository.findAll();
+    }
+
+
 }

@@ -1,7 +1,7 @@
 package pro.sky.homework31.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pro.sky.homework31.model.Faculty;
 import pro.sky.homework31.model.Student;
 import pro.sky.homework31.repository.StudentRepository;
 
@@ -42,4 +42,12 @@ public class StudentService {
     public List<Student> getStudentsAccordingAge(int age) {
         return studentRepository.findStudentByAge(age);
     }
+
+    public Collection<Student> findByAgeBetween(int min, int max){
+        return studentRepository.findByAgeBetweenIgnoreCase(min, max);
+    }
+    public Faculty findFacultyByStudent(long id){
+        return studentRepository.getReferenceById(id).getFaculty();
+    }
+
 }

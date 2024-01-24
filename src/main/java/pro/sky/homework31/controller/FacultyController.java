@@ -51,4 +51,6 @@ public class FacultyController {
     public List<Faculty> getFacultyAccordingColor(@RequestParam String color){
         return facultyService.getFacultyAccordingColor(color);
     }
+
+
 }

@@ -1,17 +1,25 @@
 package pro.sky.homework31.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
+
 @Entity
+@Table(name ="faculties")
 public class Faculty {
     @GeneratedValue
     @Id
     private Long id;
+    @Column
     private String name;
+    @Column
     private String color;
+
+    @OneToMany(mappedBy = "faculty")
+    private List<Student> students;
+
 
     public Faculty() {
     }
@@ -67,4 +75,9 @@ public class Faculty {
                 ", color='" + color + '\'' +
                 '}';
     }
+    public Collection<Student> getStudents() {
+        return students;
+    }
+
 }
+
